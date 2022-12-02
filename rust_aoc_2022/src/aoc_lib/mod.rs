@@ -1,1 +1,2 @@
-pub mod elf_food;
+pub mod day_1;
+pub mod day_2;
