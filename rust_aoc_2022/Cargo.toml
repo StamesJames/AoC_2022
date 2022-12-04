@@ -17,4 +17,15 @@ path = "./src/day_02.rs"
 name = "day03"
 path = "./src/day_03.rs"
 
+[[bin]]
+name = "day04"
+path = "./src/day_04.rs"
+
+[[bench]]
+name = "my_benchmark"
+harness = false
+
 [dependencies]
+criterion = "0.4.0"
+csv = "1.1.6"
+rayon = "1.6.0"

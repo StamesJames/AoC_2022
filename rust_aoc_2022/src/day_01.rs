@@ -7,7 +7,7 @@ fn main() {
 }
 
 fn day_1() {
-    let path = Path::new(r"./res/day_01/elf_food_list.csv");
+    let path = Path::new(r"./res/day_01/day_01.csv");
     let (calories, elf_index) = find_most_cal_elf(&path);
     println!("Elf number {elf_index} has with {calories} the most calories");
     let v @ [elf_1, elf_2, elf_3] =
