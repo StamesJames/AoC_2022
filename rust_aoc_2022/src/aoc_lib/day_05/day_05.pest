@@ -1,0 +1,16 @@
+input = ${ SOI ~ towers ~ white* ~ moves ~ white* ~ EOI }
+
+towers = ${(tower_row ~ NEWLINE)* ~ tower_end_row ~ NEWLINE}
+tower_end_row = ${" " ~ ASCII_DIGIT ~ " " ~ ("  " ~ ASCII_DIGIT ~ " ")*}
+tower_row = ${tower_entry ~ (" " ~ tower_entry)*}
+tower_entry = ${empty | one_crate}
+empty = ${"   "}
+one_crate = ${"[" ~ ASCII_ALPHA ~ "]"}
+
+moves = !{(one_move ~ NEWLINE)* ~ one_move | one_move}
+one_move = !{ "move" ~ int ~ "from" ~ int ~ "to" ~ int}
+
+int = ${ASCII_NONZERO_DIGIT ~ ASCII_DIGIT* | ASCII_DIGIT}
+
+WHITESPACE = _{" "}
+white = _{NEWLINE | " "}

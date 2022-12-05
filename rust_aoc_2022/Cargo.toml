@@ -21,6 +21,10 @@ path = "./src/day_03.rs"
 name = "day04"
 path = "./src/day_04.rs"
 
+[[bin]]
+name = "day05"
+path = "./src/day_05.rs"
+
 [[bench]]
 name = "my_benchmark"
 harness = false
@@ -28,4 +32,6 @@ harness = false
 [dependencies]
 criterion = "0.4.0"
 csv = "1.1.6"
+pest = "2.5.1"
+pest_derive = "2.5.1"
 rayon = "1.6.0"
