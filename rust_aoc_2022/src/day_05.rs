@@ -1,4 +1,4 @@
-use std::{path::Path, fs, error::Error, task::Context};
+use std::{path::Path, fs, error::Error};
 
 extern crate pest;
 #[macro_use]
