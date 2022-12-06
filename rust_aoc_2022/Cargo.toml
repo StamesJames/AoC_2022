@@ -21,6 +21,10 @@ path = "./src/day_03.rs"
 name = "day04"
 path = "./src/day_04.rs"
 
+[[bin]]
+name = "fetchRes"
+path = "./src/fetch_res.rs"
+
 [[bench]]
 name = "my_benchmark"
 harness = false
@@ -28,4 +32,7 @@ harness = false
 [dependencies]
 criterion = "0.4.0"
 csv = "1.1.6"
+dotenv = "0.15.0"
 rayon = "1.6.0"
+reqwest = { version = "0.11.13", features = ["blocking", "json", "cookies"] }
+tokio = "1.22.0"
