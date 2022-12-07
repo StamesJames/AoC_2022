@@ -1,0 +1,9 @@
+
+input = {((comand | file_dir) ~ NEWLINE*)* ~(comand | file_dir)}
+
+comand = {"$" ~ (cd | ls)}
+cd = {"cd" ~ path}
+
+path = {(root | back)}
+root = { "/" }
+back = { ".." }
