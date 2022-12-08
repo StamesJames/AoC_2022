@@ -22,7 +22,7 @@ name = "day04"
 path = "./src/day_04.rs"
 
 [[bin]]
-name = "fetchRes"
+name = "fetch_res"
 path = "./src/fetch_res.rs"
 
 [[bin]]

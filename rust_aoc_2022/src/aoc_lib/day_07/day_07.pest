@@ -1,9 +1,19 @@
 
-input = {((comand | file_dir) ~ NEWLINE*)* ~(comand | file_dir)}
+input = {((comand | ls_elem) ~ NEWLINE*)* ~(comand | ls_elem)}
 
 comand = {"$" ~ (cd | ls)}
 cd = {"cd" ~ path}
+ls = {"ls"}
 
-path = {(root | back)}
+path = {(root | back | dirname)}
 root = { "/" }
 back = { ".." }
+
+ls_elem = {(dir_elem | file_elem)}
+file_elem = {int ~ filename}
+dir_elem = {"dir" ~ dirname}
+
+int = ${(ASCII_NONZERO_DIGIT ~ ASCII_DIGIT* ) | ASCII_DIGIT}
+
+dirname = ${ ASCII_ALPHANUMERIC* }
+filename = ${(ASCII_ALPHANUMERIC | ".")*}

@@ -15,7 +15,7 @@ pub fn fetch_res_and_save_to_file(day: &str) -> Result<(), Box<dyn std::error::E
         let mut path_buf = PathBuf::from(path_string);
         fs::create_dir_all(path_buf.as_path())?;
 
-        path_buf.push(format!("{}", day_str));
+        path_buf.push(format!("day_{}.csv", day_str));
         fs::write(path_buf.as_path(), resp_text)?;
     } else {
         return Err(Box::new(WrongDayNumberError {}));
