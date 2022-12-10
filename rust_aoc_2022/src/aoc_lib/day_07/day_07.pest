@@ -1,5 +1,5 @@
 
-input = {((comand | ls_elem) ~ NEWLINE*)* ~(comand | ls_elem)}
+input = {SOI ~ ((comand | ls_elem) ~ NEWLINE*)* ~ EOI}
 
 comand = {"$" ~ (cd | ls)}
 cd = {"cd" ~ path}
@@ -17,3 +17,4 @@ int = ${(ASCII_NONZERO_DIGIT ~ ASCII_DIGIT* ) | ASCII_DIGIT}
 
 dirname = ${ ASCII_ALPHANUMERIC* }
 filename = ${(ASCII_ALPHANUMERIC | ".")*}
+WHITESPACE = _{" "}

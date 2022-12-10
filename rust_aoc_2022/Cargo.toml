@@ -33,6 +33,10 @@ path = "./src/day_05.rs"
 name = "day06"
 path = "./src/day_06.rs"
 
+[[bin]]
+name = "day07"
+path = "./src/day_07.rs"
+
 [[bench]]
 name = "my_benchmark"
 harness = false
