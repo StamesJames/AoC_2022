@@ -8,7 +8,7 @@ use std::{
     rc::Rc,
 };
 
-use pest::{iterators::Pair, Parser};
+use pest::Parser;
 
 #[derive(Parser)]
 #[grammar = "./aoc_lib/day_07/day_07.pest"]
@@ -43,11 +43,11 @@ impl FileSystem {
                         Rule::cd => {
                             let path = inner.into_inner().next().unwrap().as_str();
                             result.navigate_to(path);
-                        },
-                        Rule::ls => {},
-                        _ => unreachable!()
+                        }
+                        Rule::ls => {}
+                        _ => unreachable!(),
                     }
-                },
+                }
                 Rule::ls_elem => {
                     let inner = inner.into_inner().next().unwrap();
                     match inner.as_rule() {
@@ -71,8 +71,8 @@ impl FileSystem {
                         }
                         _ => unreachable!(),
                     }
-                },
-                Rule::EOI => {},
+                }
+                Rule::EOI => {}
                 _ => unreachable!(),
             }
         }
@@ -135,19 +135,23 @@ pub enum FileSystemElem {
 }
 
 impl FileSystemElem {
-    pub fn print(&self, depth:usize){
+    pub fn print(&self, depth: usize) {
         match self {
-            FileSystemElem::Dir { name, children, parent } => {
-                println!("{} dir {} (size: {})", "\t".repeat(depth), name, self.size());
+            FileSystemElem::Dir { name, children, .. } => {
+                println!(
+                    "{} dir {} (size: {})",
+                    "\t".repeat(depth),
+                    name,
+                    self.size()
+                );
                 for child in children.values() {
-                    (**child).borrow().print(depth +1);
+                    (**child).borrow().print(depth + 1);
                 }
-            },
-            FileSystemElem::File { name, size, parent } => {
+            }
+            FileSystemElem::File { name, size, .. } => {
                 println!("{} file {} (size: {})", "\t".repeat(depth), name, size);
-            },
+            }
         }
-
     }
 
     pub fn get_dir_sizes_above(&self, n: usize) -> Vec<usize> {
