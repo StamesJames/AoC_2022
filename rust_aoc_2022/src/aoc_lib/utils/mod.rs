@@ -1,6 +1,7 @@
 use dotenv::dotenv;
 use reqwest::{cookie::Jar, Url};
-use std::{env, error::Error, fmt::Display, fs, path::PathBuf, sync::Arc};
+use std::{env, error::Error, fmt::Display, fs::{self, OpenOptions}, path::PathBuf, sync::Arc};
+use std::io::prelude::*;
 
 pub fn fetch_res_and_save_to_file(day: &str) -> Result<(), Box<dyn std::error::Error>> {
     let day_num: usize = day.parse()?;
@@ -11,12 +12,52 @@ pub fn fetch_res_and_save_to_file(day: &str) -> Result<(), Box<dyn std::error::E
         } else {
             day.to_string()
         };
-        let path_string = format!("./res/day_{}/", day_str);
+        let day_str = format!("day_{}", day_str);
+        let path_string = format!("./res/{}/", day_str);
         let mut path_buf = PathBuf::from(path_string);
         fs::create_dir_all(path_buf.as_path())?;
-
-        path_buf.push(format!("day_{}.csv", day_str));
+        path_buf.push(format!("{}.csv", day_str));
         fs::write(path_buf.as_path(), resp_text)?;
+        path_buf.pop();
+        path_buf.push(format!("{}_test.csv", day_str));
+        fs::write(path_buf.as_path(), "")?;
+        path_buf.pop();
+        path_buf.pop();
+        path_buf.pop();
+        
+        path_buf.push("Cargo.toml");
+        {
+            let mut file = OpenOptions::new()
+            .write(true)
+            .append(true)
+            .open(path_buf.as_path())?;
+            let cont = format!(
+                "[[bin]]\nname = \"{}\"\npath = \"./src/{}.rs\"", day_str, day_str);
+            writeln!(file, "{}", cont)?;
+        }
+        path_buf.pop();
+
+        path_buf.push("src");
+        path_buf.push(format!("{}.rs", day_str));
+        fs::write(path_buf.as_path(), format!("\nuse std::path::Path;\n\nfn main() -> Result<(), Box<dyn std::error::Error>> {{\n\tlet path = Path::new(r\"./res/{}/{}_test.csv\");\n\n\tOk(())\n}}\n", day_str, day_str))?;
+        path_buf.pop();
+        path_buf.push("aoc_lib");
+        path_buf.push("mod.rs");
+        {
+            let mut file = OpenOptions::new()
+            .write(true)
+            .append(true)
+            .open(path_buf.as_path())?;
+            let mod_line = format!("pub mod {};", day_str);
+            writeln!(file, "{}", mod_line)?;
+        }
+        path_buf.pop();
+        path_buf.push(format!("{}", day_str));
+        fs::create_dir_all(path_buf.as_path())?;
+        path_buf.push("mod.rs");
+        fs::write(path_buf.as_path(), "")?;
+        
+
     } else {
         return Err(Box::new(WrongDayNumberError {}));
     }
