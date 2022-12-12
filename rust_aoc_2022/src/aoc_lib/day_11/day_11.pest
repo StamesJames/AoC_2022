@@ -1,0 +1,26 @@
+input = {SOI ~ monkey* ~ EOI} 
+//{SOI ~ NEWLINE* ~ (monkey ~ NEWLINE*)* ~ EOI}
+
+monkey = {
+    "Monkey" ~ int ~ ":" ~ 
+    starting_items ~
+    operation ~
+    test}
+
+starting_items = {"Starting" ~ "items" ~ ":" ~ (int ~ ",")* ~ int}
+
+operation = {"Operation" ~ ":" ~ "new" ~ "=" ~ (addition | multiplikation)}
+
+addition = {(old | int) ~ "+" ~ (old | int)}
+multiplikation = {(old | int) ~ "*" ~ (old | int)}
+
+old = {"old"}
+
+test = {
+    "Test" ~ ":" ~ "divisible" ~ "by" ~ int ~
+        "If" ~ "true"~":" ~ "throw" ~ "to" ~ "monkey" ~ int ~
+        "If" ~ "false"~":" ~ "throw" ~ "to" ~ "monkey" ~ int
+        }
+
+int = ${ ASCII_NONZERO_DIGIT ~ ASCII_DIGIT* | ASCII_DIGIT}
+WHITESPACE = _{" " | "\t" | "\n" | "\r\n" | "\r"}
