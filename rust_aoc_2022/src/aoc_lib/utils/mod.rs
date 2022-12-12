@@ -3,6 +3,8 @@ use reqwest::{cookie::Jar, Url};
 use std::{env, error::Error, fmt::Display, fs::{self, OpenOptions}, path::PathBuf, sync::Arc};
 use std::io::prelude::*;
 
+pub type GenDynResult<R> = Result<R, Box<dyn std::error::Error>>;
+
 pub fn fetch_res_and_save_to_file(day: &str) -> Result<(), Box<dyn std::error::Error>> {
     let day_num: usize = day.parse()?;
     if day_num > 0 && day_num <= 24 {
