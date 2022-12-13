@@ -2,9 +2,7 @@ use std::path::Path;
 
 use rust_aoc_2022::aoc_lib::day_05::tower_moves_parse;
 
-
-
-fn main() -> Result<(), Box<dyn std::error::Error>>{
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let path = Path::new("./res/day_05/day_05.csv");
 
     let (towers, moves) = tower_moves_parse(path)?;

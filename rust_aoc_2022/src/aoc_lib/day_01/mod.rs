@@ -1,4 +1,8 @@
-use std::{path::Path, fs::File, io::{BufReader, BufRead}};
+use std::{
+    fs::File,
+    io::{BufRead, BufReader},
+    path::Path,
+};
 
 pub fn find_most_cal_elf(path: &Path) -> (usize, usize) {
     let mut max_calories = 0;
@@ -33,7 +37,7 @@ pub fn find_3_most_cal_elfs(path: &Path) -> [usize; 3] {
     let file = File::open(path).unwrap();
     let reader = BufReader::new(file);
 
-    let mut max_3_elfes = [0,0,0];
+    let mut max_3_elfes = [0, 0, 0];
     let mut current_calorie_count = 0;
 
     for line in reader.lines().map(|x| x.unwrap()) {
@@ -48,7 +52,7 @@ pub fn find_3_most_cal_elfs(path: &Path) -> [usize; 3] {
     return max_3_elfes;
 }
 
-fn add_to_3_max(x:usize, values: &mut [usize; 3]){
+fn add_to_3_max(x: usize, values: &mut [usize; 3]) {
     let mut x = x;
     for v in values {
         if x > *v {

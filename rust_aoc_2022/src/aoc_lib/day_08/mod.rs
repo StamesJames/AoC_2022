@@ -1,30 +1,23 @@
-use std::{fs::File, io::{BufReader, BufRead}, path::Path, vec};
+use std::{
+    fs::File,
+    io::{BufRead, BufReader},
+    path::Path,
+};
 
-use nalgebra::{DMatrix, DVector, Matrix1xX};
+use nalgebra::DMatrix;
 
+pub fn get_looking_distance_matrix(matrix: &DMatrix<i32>) -> DMatrix<(usize, usize, usize, usize)> {
+    let mut looking_distance_matrix =
+        DMatrix::from_element(matrix.nrows(), matrix.ncols(), (0, 0, 0, 0));
 
-pub fn get_visible_tree_count(path: &Path) -> Result<usize, Box<dyn std::error::Error>> {
-    let matrix = parse_matrix(path)?;
-    return Ok(get_visible_tree_count_matrix(matrix));
-}
-
-pub fn get_visible_tree_count_matrix(matrix: DMatrix<i32>) -> usize {
-    todo!()
-}
-
-
-pub fn get_looking_distance_matrix(matrix: &DMatrix<i32>) -> DMatrix<(usize,usize,usize,usize)> {
-    let mut looking_distance_matrix = DMatrix::from_element(matrix.nrows(), matrix.ncols(), (0,0,0,0));
-    
-
-    for (row_num, row) in matrix.row_iter().enumerate(){
+    for (row_num, row) in matrix.row_iter().enumerate() {
         let mut row_vec = Vec::new();
         for (col_num, elem) in row.iter().enumerate() {
             let distance = get_looking_distance(*elem, &row_vec);
             row_vec.push(*elem);
             looking_distance_matrix[(row_num, col_num)].0 = distance;
         }
-        
+
         let mut row_vec = Vec::new();
         for (col_num, elem) in row.iter().enumerate().rev() {
             let distance = get_looking_distance(*elem, &row_vec);
@@ -35,27 +28,27 @@ pub fn get_looking_distance_matrix(matrix: &DMatrix<i32>) -> DMatrix<(usize,usiz
 
     for (col_num, col) in matrix.column_iter().enumerate() {
         let mut col_vec = Vec::new();
-        
-        for (row_num, elem) in col.iter().enumerate(){
+
+        for (row_num, elem) in col.iter().enumerate() {
             let distance = get_looking_distance(*elem, &col_vec);
             col_vec.push(*elem);
             looking_distance_matrix[(row_num, col_num)].2 = distance;
         }
-        
+
         let mut col_vec = Vec::new();
-        for (row_num, elem) in col.iter().enumerate().rev(){
+        for (row_num, elem) in col.iter().enumerate().rev() {
             let distance = get_looking_distance(*elem, &col_vec);
             col_vec.push(*elem);
             looking_distance_matrix[(row_num, col_num)].3 = distance;
         }
     }
-    
+
     return looking_distance_matrix;
 }
 
-pub fn get_looking_distance(n: i32, trees: &Vec<i32>)-> usize{
+pub fn get_looking_distance(n: i32, trees: &Vec<i32>) -> usize {
     let mut distance = 0;
-    
+
     for tree in trees.iter().rev() {
         distance += 1;
         if tree >= &n {
@@ -68,10 +61,10 @@ pub fn get_looking_distance(n: i32, trees: &Vec<i32>)-> usize{
 
 pub fn get_visibility_matrix(matrix: &DMatrix<i32>) -> DMatrix<i32> {
     let mut visibilitiy_matrix = DMatrix::from_element(matrix.nrows(), matrix.ncols(), 0);
-    
+
     let mut current_max = -1;
 
-    for (row_num, row) in matrix.row_iter().enumerate(){
+    for (row_num, row) in matrix.row_iter().enumerate() {
         for (col_num, elem) in row.iter().enumerate() {
             if elem > &current_max {
                 visibilitiy_matrix[(row_num, col_num)] = 1;
@@ -89,14 +82,14 @@ pub fn get_visibility_matrix(matrix: &DMatrix<i32>) -> DMatrix<i32> {
     }
 
     for (col_num, col) in matrix.column_iter().enumerate() {
-        for (row_num, elem) in col.iter().enumerate(){
+        for (row_num, elem) in col.iter().enumerate() {
             if elem > &current_max {
                 visibilitiy_matrix[(row_num, col_num)] = 1;
                 current_max = *elem;
             }
         }
         current_max = -1;
-        for (row_num, elem) in col.iter().enumerate().rev(){
+        for (row_num, elem) in col.iter().enumerate().rev() {
             if elem > &current_max {
                 visibilitiy_matrix[(row_num, col_num)] = 1;
                 current_max = *elem;
@@ -104,7 +97,7 @@ pub fn get_visibility_matrix(matrix: &DMatrix<i32>) -> DMatrix<i32> {
         }
         current_max = -1;
     }
-    
+
     return visibilitiy_matrix;
 }
 
@@ -113,7 +106,7 @@ pub fn parse_matrix(path: &Path) -> Result<DMatrix<i32>, Box<dyn std::error::Err
     let file = File::open(path)?;
     let reader = BufReader::new(file);
 
-    for line in reader.lines(){
+    for line in reader.lines() {
         let line = line?;
         let line = line.trim();
         let mut next_row = Vec::new();

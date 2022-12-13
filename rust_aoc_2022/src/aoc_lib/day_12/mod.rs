@@ -6,9 +6,6 @@ use std::{
     path::Path,
 };
 
-use csv::Position;
-use rayon::result;
-
 use super::utils::GenDynResult;
 
 pub fn get_path_length_to_position_from_file(
@@ -32,7 +29,7 @@ pub fn get_path_length_to_position(
 
     while !queue.is_empty() {
         let (x, y) = queue.pop_front().unwrap();
-        println!("look at: {:?}", (x,y));
+        println!("look at: {:?}", (x, y));
         let neighbors_to_cur = get_all_neighbors_that_can_move_to_pos(height_map, (x, y));
         println!("with neighbors {:?}", neighbors_to_cur);
         neighbors_to_cur.iter().for_each(|(n_x, n_y)| {

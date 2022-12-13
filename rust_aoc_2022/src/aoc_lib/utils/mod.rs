@@ -1,7 +1,14 @@
 use dotenv::dotenv;
 use reqwest::{cookie::Jar, Url};
-use std::{env, error::Error, fmt::Display, fs::{self, OpenOptions}, path::PathBuf, sync::Arc};
 use std::io::prelude::*;
+use std::{
+    env,
+    error::Error,
+    fmt::Display,
+    fs::{self, OpenOptions},
+    path::PathBuf,
+    sync::Arc,
+};
 
 pub type GenDynResult<R> = Result<R, Box<dyn std::error::Error>>;
 
@@ -26,15 +33,17 @@ pub fn fetch_res_and_save_to_file(day: &str) -> Result<(), Box<dyn std::error::E
         path_buf.pop();
         path_buf.pop();
         path_buf.pop();
-        
+
         path_buf.push("Cargo.toml");
         {
             let mut file = OpenOptions::new()
-            .write(true)
-            .append(true)
-            .open(path_buf.as_path())?;
+                .write(true)
+                .append(true)
+                .open(path_buf.as_path())?;
             let cont = format!(
-                "[[bin]]\nname = \"{}\"\npath = \"./src/{}.rs\"", day_str, day_str);
+                "[[bin]]\nname = \"{}\"\npath = \"./src/{}.rs\"",
+                day_str, day_str
+            );
             writeln!(file, "{}", cont)?;
         }
         path_buf.pop();
@@ -47,9 +56,9 @@ pub fn fetch_res_and_save_to_file(day: &str) -> Result<(), Box<dyn std::error::E
         path_buf.push("mod.rs");
         {
             let mut file = OpenOptions::new()
-            .write(true)
-            .append(true)
-            .open(path_buf.as_path())?;
+                .write(true)
+                .append(true)
+                .open(path_buf.as_path())?;
             let mod_line = format!("pub mod {};", day_str);
             writeln!(file, "{}", mod_line)?;
         }
@@ -58,8 +67,6 @@ pub fn fetch_res_and_save_to_file(day: &str) -> Result<(), Box<dyn std::error::E
         fs::create_dir_all(path_buf.as_path())?;
         path_buf.push("mod.rs");
         fs::write(path_buf.as_path(), "")?;
-        
-
     } else {
         return Err(Box::new(WrongDayNumberError {}));
     }

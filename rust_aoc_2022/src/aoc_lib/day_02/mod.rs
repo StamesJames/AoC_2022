@@ -13,7 +13,7 @@ pub fn get_rps_score_with_endings(path: &Path) -> usize {
     for line in reader.lines().map(|x| x.unwrap()).filter(|s| !s.is_empty()) {
         let line = line.split_whitespace().collect::<Vec<&str>>();
         let oponent: RPS = line[0].parse::<RPS>().unwrap();
-        let ending:Ending = line[1].parse::<Ending>().unwrap();
+        let ending: Ending = line[1].parse::<Ending>().unwrap();
         let my_rps = ending.get_rps_for_ending(&oponent);
         result += ending.get_score();
         result += my_rps.get_score();
@@ -55,7 +55,7 @@ impl RPS {
         }
     }
 
-    pub fn get_ending(&self, other:&RPS) -> Ending {
+    pub fn get_ending(&self, other: &RPS) -> Ending {
         match self {
             RPS::Rock => match other {
                 RPS::Rock => Ending::Draw,

@@ -1,5 +1,5 @@
-use std::path::Path;
 use rust_aoc_2022::aoc_lib::day_09::make_moves_from_file;
+use std::path::Path;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let path = Path::new(r"./res/day_09/day_09.csv");
@@ -14,7 +14,3 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{:?}", positions.len());
     Ok(())
 }
-
-
-
-

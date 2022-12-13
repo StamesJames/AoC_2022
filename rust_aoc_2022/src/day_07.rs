@@ -2,9 +2,7 @@ use std::path::Path;
 
 use rust_aoc_2022::aoc_lib::day_07::FileSystem;
 
-
-
-fn main() -> Result<(), Box<dyn std::error::Error>>{
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let path = Path::new(r"./res/day_07/day_07.csv");
     let file_system = FileSystem::from_file(path)?;
 
@@ -20,7 +18,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
     let free_space = disk_space - filse_system_size;
     let space_to_free = update_size - free_space;
 
-    let fu = *file_system.get_dir_sizes_above(space_to_free).iter().min().unwrap();
+    let fu = *file_system
+        .get_dir_sizes_above(space_to_free)
+        .iter()
+        .min()
+        .unwrap();
     println!("the smalest dir above 30_000_000 has size: {}", fu);
 
     Ok(())
