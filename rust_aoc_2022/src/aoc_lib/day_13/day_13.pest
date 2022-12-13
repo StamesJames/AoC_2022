@@ -1,0 +1,10 @@
+input = {SOI ~ pair* ~ EOI}
+
+pair = {list ~ list}
+
+packet_data = {list | int}
+list = { "[" ~ ((packet_data ~ ",")* ~ packet_data ~ ","?)? ~ "]" }
+
+
+int = ${ ASCII_NONZERO_DIGIT ~ ASCII_DIGIT* | ASCII_DIGIT}
+WHITESPACE = _{" " | "\t" | "\n" | "\r\n" | "\r"}
