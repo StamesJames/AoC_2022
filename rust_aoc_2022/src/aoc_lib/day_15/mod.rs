@@ -1,0 +1,98 @@
+use std::{fs::File, io::{BufReader, BufRead}, path::Path, collections::{HashSet, HashMap}, hash::Hash};
+
+use rayon::result;
+use regex::Regex;
+
+use super::utils::{GenDynResult, EmptyOptionError};
+
+pub fn get_manhaten_distance((x1,y1):(isize, isize), (x2,y2):(isize, isize)) -> usize {
+    x1.abs_diff(x2) + y1.abs_diff(y2)
+}
+
+pub fn get_all_pos_from_with_dist_in_row() -> Vec<(usize, usize)>{
+
+}
+
+pub fn get_all_pos_from_with_dist((x,y):(isize, isize), dist: usize) -> Vec<(isize, isize)> {
+    let mut result = Vec::new();
+
+    for i in 0..=dist as isize {
+        for d_x in 0..=i {
+            result.push((x + d_x,y + (i-d_x)));
+            result.push((x - d_x,y + (i-d_x)));
+            result.push((x + d_x,y - (i-d_x)));
+            result.push((x - d_x,y - (i-d_x)));
+        }
+    }
+
+    result
+}
+
+
+pub fn parse_sensor_beacon_positions(path:&Path) -> GenDynResult<Vec<((isize, isize), (isize, isize))>> {
+    let mut result = Vec::new();
+    let file = File::open(path)?;
+    let reader = BufReader::new(file);
+
+    for line in reader.lines(){
+        let line = line?;
+        let mut line = line.trim().split(":");
+
+        let sensor_str = line.next().ok_or(EmptyOptionError)?;
+        let re = Regex::new(r"x=(-?\d*), y=(-?\d*)").unwrap();
+        let sensor_cap = re.captures_iter(sensor_str).next().unwrap();
+        println!("sen x: {}, sen y: {}", &sensor_cap[1], &sensor_cap[2]);
+        let sensor_pos = (sensor_cap[1].parse()?, sensor_cap[2].parse()?);
+
+        let beacon_str = line.next().ok_or(EmptyOptionError)?;
+        let beacon_cap = re.captures_iter(beacon_str).next().unwrap();
+        println!("bea x: {}, bea y: {}", &beacon_cap[1], &beacon_cap[2]);
+        let beacon_pos = (beacon_cap[1].parse()?, beacon_cap[2].parse()?);
+
+        result.push((sensor_pos, beacon_pos));
+    }
+
+
+    Ok(result)
+}
+
+pub struct SensorBeaconPoss{
+    sensor_poss: HashSet<(isize, isize)>,
+    beacon_poss: HashSet<(isize, isize)>,
+    sensor_beacon_pairs: HashMap<(isize, isize), (isize, isize)>,
+    sensor_rows: HashMap<isize, HashSet<isize>>,
+    beacon_rows: HashMap<isize, HashSet<isize>>,
+}
+
+impl SensorBeaconPoss {
+    pub fn new() -> Self { Self { sensor_poss: HashSet::new(), beacon_poss: HashSet::new(), sensor_beacon_pairs: HashMap::new(), sensor_rows: HashMap::new(), beacon_rows: HashMap::new() } }
+
+    pub fn from_sensor_beacon_pairs(sensor_beacon_pairs_vec: Vec<((isize,isize),(isize,isize))>) -> Self {
+        let mut sensor_poss = HashSet::new();
+        let mut beacon_poss = HashSet::new();
+        let mut sensor_beacon_pairs = HashMap::new();
+        let mut sensor_rows = HashMap::new();
+        let mut beacon_rows = HashMap::new();
+
+        for (sensor, beacon) in sensor_beacon_pairs_vec {
+            sensor_poss.insert(sensor);
+            beacon_poss.insert(beacon);
+            sensor_beacon_pairs.insert(sensor, beacon);
+            if !sensor_rows.contains_key(&sensor.1) {
+                sensor_rows.insert(sensor.1, HashSet::new());
+            }
+            sensor_rows.get(&sensor.1).unwrap().insert(sensor.0);
+            if !beacon_rows.contains_key(&beacon.1) {
+                beacon_rows.insert(beacon.1, HashSet::new());
+            }
+            beacon_rows.get(&beacon.1).unwrap().insert(beacon.0);
+
+        }
+
+        Self { sensor_poss, beacon_poss, sensor_beacon_pairs, sensor_rows, beacon_rows }
+    }
+
+    pub fn get_covered_in_row(&self, row:isize) -> usize{
+        
+    }
+}

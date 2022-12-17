@@ -95,3 +95,13 @@ impl Display for WrongDayNumberError {
     }
 }
 impl Error for WrongDayNumberError {}
+
+
+#[derive(Debug)]
+pub struct EmptyOptionError;
+impl Display for EmptyOptionError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Option was empty")
+    }
+}
+impl Error for EmptyOptionError {}

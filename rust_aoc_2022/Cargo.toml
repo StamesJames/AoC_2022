@@ -53,6 +53,7 @@ nalgebra = "0.31.4"
 pest = "2.5.1"
 pest_derive = "2.5.1"
 rayon = "1.6.0"
+regex = "1.7.0"
 reqwest = { version = "0.11.13", features = ["blocking", "json", "cookies"] }
 termion = "2.0.1"
 tokio = "1.22.0"
@@ -76,3 +77,6 @@ path = "./src/day_13.rs"
 [[bin]]
 name = "day_14"
 path = "./src/day_14.rs"
+[[bin]]
+name = "day_15"
+path = "./src/day_15.rs"
