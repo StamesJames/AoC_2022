@@ -1,6 +1,3 @@
-extern crate termion;
-
-use termion::{clear, color, cursor};
 
 
 use std::{path::Path, io::{self, Write}};
